@@ -10,6 +10,12 @@ def create_arguments():
     parser.add_argument('-v', '--value', help='receipt a value for key-value storage', type=str, default=None)
     return parser
 
-with open(storage_path, 'r+') as f:
-    parser = create_arguments()
-    args = parser.parse_args()
+def write_to_json(destination, key, value=None):
+    with open(destination, 'a') as file_obj:
+        json.dump({key: value}, file_obj)
+        file_obj.close()
+
+
+parser = create_arguments()
+args = parser.parse_args()
+#with open(storage_path, 'r+') as f:

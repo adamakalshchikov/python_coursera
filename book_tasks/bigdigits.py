@@ -1,13 +1,13 @@
 import sys
 
-Zero  = [" *** ", 
-         "*   *", 
-         "*   *", 
+Zero  = [" *** ",
+         "*   *",
+         "*   *",
          "*   *",
          "*   *",
          "*   *",
          " *** "]
-		 
+
 One   = [" * ",
          "** ",
          " * ",
@@ -15,7 +15,7 @@ One   = [" * ",
          " * ",
          " * ",
          "***"]
-		 
+
 Two   = [" *** ",
          "*   *",
          "*  * ",
@@ -81,8 +81,9 @@ try:
     for row in range(7):
         one_string = str()
         for num in numbers:
-            one_string += Digits[int(num)][row] + " "
+            one_string += Digits[int(num)][row] + ' git  ' #.replace("*", num) + " "
         print(one_string)
+
 except ValueError as incorrect_arg:
-	print(incorrect_arg)
+    print(incorrect_arg)
 

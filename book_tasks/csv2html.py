@@ -1,8 +1,7 @@
-import sys
-
+from pars import args
 
 def main():
-    maxwidth = 100
+    maxwidth = args.maxwidth
     print_start()
     count = 0
     while True:
@@ -39,7 +38,7 @@ def print_line(line, color, maxwidth):
             number = field.replace(",", "")
             try:
                 x = float(number)
-                print("<td align='right'>{0:d}</td>".format(round(x)))
+                print(f"<td align='right'>{round(x):{args.format}}</td>")
             except ValueError:
                 field = field.title()
                 field = field.replace(" And ", " and ")

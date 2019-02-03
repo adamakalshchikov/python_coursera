@@ -1,4 +1,5 @@
 import sys
+import xml.sax.saxutils as sax
 
 
 def main():
@@ -43,7 +44,7 @@ def print_line(line, color, maxwidth):
             except ValueError:
                 field = field.title()
                 field = field.replace(" And ", " and ")
-                field = escape_html(field)
+                #field = sax.escape(field)
                 if len(field) <= maxwidth:
                     print(f"<td>{field}</td>")
                 else:
@@ -72,13 +73,6 @@ def extract_fields(line):
     if field:
         fields.append(field)  # adding the last field
     return fields
-
-
-def escape_html(text):
-    text = text.replace("&", "&amp;")
-    text = text.replace("<", "&lt;")
-    text = text.replace(">", "&gt;")
-    return text
 
 
 main()

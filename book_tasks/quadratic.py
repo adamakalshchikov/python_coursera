@@ -8,6 +8,8 @@ def get_float(msg, allow_zero):
 	while x is None:
 		try:
 			x = float(input(msg))
+			if x.is_integer():
+				x = int(x)
 			if not allow_zero and abs(x) < sys.float_info.epsilon:
 				print("Zero isn`t allowed")
 				x = None
@@ -30,8 +32,8 @@ def ger_roots(a, b, c):
 			discr_root = cmath.sqrt(discr)
 		x1 = (-b + discr_root) / (2 * a)
 		x2 = (-b - discr_root) / (2 * a)
-	roots = (x1, x2)
-	return roots
+	x1_x2 = (x1, x2)
+	return x1_x2
 
 	
 print("ax\N{SUPERSCRIPT TWO} + bx + c = 0")
@@ -40,8 +42,8 @@ b = get_float("enter b: ", True)
 c = get_float("enter c: ", True)
 
 roots = ger_roots(a, b, c)
-equation = (f"{a}x\N{SUPERSCRIPT TWO}{b:+}x{c:+} = 0"
-f" \N{RIGHTWARDS ARROW} x = {roots[0]}")
+equation = (f"{a}x\N{SUPERSCRIPT TWO}{b:+}x{c:+}=0"
+f" \N{RIGHTWARDS ARROW} x = {roots[0]:.2}")
 if roots[1] is not None:
-	equation += f" or x = {roots[1]}"
+	equation += f" or x = {roots[1]:.2}"
 print(equation)

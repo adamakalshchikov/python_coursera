@@ -1,10 +1,7 @@
-import sys
-import xml.sax.saxutils as sax
-import argparse
-
+from pars import args
 
 def main():
-    maxwidth = params.maxwidth
+    maxwidth = args.maxwidth
     print_start()
     count = 0
     while True:
@@ -21,23 +18,6 @@ def main():
         except EOFError:
             break
     print_end()
-
-
-def process_option():
-    parser = argparse.ArgumentParser()
-
-    parser.add_argument('-mw', '--maxwidth', type=int, default=100,
-                        help="""maxwidth is an optional integer; if specofied, it sets the maximum number of characters
-            that can be output for string fields.
-            otherwise a default of 100 is used.""")
-
-    parser.add_argument('-f', '--format', type=str, default=".0f",
-                        help="""format is the format to use for numbers. if not specified
-            it defaults ot '.0f' """)
-    args = parser.parse_args()
-    return args
-
-
 
 
 def print_start():
@@ -58,7 +38,7 @@ def print_line(line, color, maxwidth):
             number = field.replace(",", "")
             try:
                 x = float(number)
-                print("<td align='right'>{0:{1}}</td>".format(round(x), params.format))
+                print(f"<td align='right'>{round(x):{args.format}}</td>")
             except ValueError:
                 field = field.title()
                 field = field.replace(" And ", " and ")
@@ -92,5 +72,4 @@ def extract_fields(line):
         fields.append(field)  # adding the last field
     return fields
 
-params = process_option()
 main()

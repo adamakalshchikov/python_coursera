@@ -12,7 +12,7 @@ BRANCH_PATH = r'\branch'
 
 def fw_params():
 	parser = argparse.ArgumentParser()
-	parser.add_argument('-m', '--model', type=int, default=None)
+	parser.add_argument('-m', '--model', type=str, default=None)
 	parser.add_argument('-b', '--build', type=int, default=None)
 	parser.add_argument('-br', '--branch', action='store_true', default=False)
 	parser.add_argument('-p', '--port', type=int, default=None)
@@ -24,6 +24,7 @@ def fw_params():
 
 def con_path(build: int, is_branch: bool):
 	build_dir = None
+	dir_candidate = None
 	parent_dir = Path(MAIN_PATH)
 	if not is_branch:
 		temp = parent_dir / 'container'
@@ -37,7 +38,9 @@ def con_path(build: int, is_branch: bool):
 	return build_dir
 
 
-def file_copier(build_dir:str, is_release: bool, build: int, model: int, dst = FW_PATH):
+def file_copier(build_dir: Path, is_release: bool, build: int, model: str, dst = FW_PATH):
+	dir = build_dir / 'release' if is_release else build_dir / 'debug'
+	for d in dir.iterdir():
 
 
 

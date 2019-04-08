@@ -1,4 +1,4 @@
-from shutil import copyfile
+from shutil import copy2
 from pathlib import Path
 import argparse
 import json
@@ -8,6 +8,7 @@ import os
 FW_PATH = r'C:\FirmwareUpdater'
 MAIN_PATH = r'\\cri-files\Builds$\FRPlatform2.5'
 BRANCH_PATH = r'\branch'
+OT = r'C:\ProgramData\ATOL\OT'
 
 
 def fw_params():
@@ -80,7 +81,7 @@ def file_copier(build_dir: Path, is_release: bool, build: int, model: str):
 	"""
 
 	release_debug_switch = {True: 'release', False: 'debug'}
-	with open('models.json') as file:
+	with open(os.path.join(OT,'models.json')) as file:
 		models_name = json.load(file)
 		try:
 			directory_of_container = build_dir / release_debug_switch[is_release] / models_name[model] / 'All'
@@ -91,7 +92,7 @@ def file_copier(build_dir: Path, is_release: bool, build: int, model: str):
 	con_name = None
 	for child in directory_of_container.iterdir():
 		if str(build) in child.name:
-			copyfile(src=str(child), dst=str(Path(FW_PATH) / child.name))
+			copy2(src=str(child), dst=str(Path(FW_PATH) / child.name))
 			con_name = child.name
 	return con_name
 
@@ -100,10 +101,10 @@ if __name__ == '__main__':
 	upd_options = fw_params()
 	
 	# Пишем номер порта в settings.json
-	with open(os.path.join(FW_PATH, 'settings.json'), 'r') as file_settings:
+	with open(os.path.join(FW_PATH, 'settings.json'), 'r', encoding='cp1251') as file_settings:
 		settings = json.load(file_settings)
 		file_settings.close()
-	with open(os.path.join(FW_PATH, 'settings.json'), 'w') as file_settings:
+	with open(os.path.join(FW_PATH, 'settings.json'), 'w', encoding='cp1251') as file_settings:
 		settings['com']['number'] = upd_options.port
 		json.dump(settings, file_settings)
 		file_settings.close()
@@ -113,6 +114,6 @@ if __name__ == '__main__':
 	list_of_directories = get_candidates(upd_options.build, upd_options.branch)
 	dir_with_container = choose_dir(list_of_directories)
 	container_name = file_copier(dir_with_container, upd_options.release, upd_options.build, upd_options.model)
-	print(f'FirmwareUpdater.exe -f "{container_name}"')  # использовать для отладки
-	#os.system('cd C:\FirmwareUpdater')
-	#os.system(f'C:\FirmwareUpdater\FirmwareUpdater.exe -f "{container_name}"')
+	#print(f'FirmwareUpdater.exe -f "{container_name}"')  # использовать для отладки
+	os.system('cd C:\FirmwareUpdater')
+	os.system(f'C:\FirmwareUpdater\FirmwareUpdater.exe -f "{container_name}"')

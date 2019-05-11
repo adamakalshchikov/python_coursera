@@ -1,5 +1,3 @@
-import doctest
-
 
 class Transaction:
     """
@@ -10,8 +8,12 @@ class Transaction:
     >>> t = Transaction(95000, "2019-05-11", currency="RUB", usd_conversion_rate=1/65.12)
     >>> t.amount, t.currency, t.usd_conversion_rate, t.usd
     (95000, 'RUB', 0.015356265356265355, 1458.8452088452086)
+
+    >>> t = Transaction(100.15, "2008-12-09")
+    >>> t.amount, t.currency, t.usd_conversion_rate, t.usd
+    (100.15, 'USD', 1.0, 100.15)
     """
-    def __init__(self, amount, date, currency="USD", usd_conversion_rate=1.0,
+    def __init__(self, amount: (int, float), date, currency="USD", usd_conversion_rate=1.0,
                  description=None):
         self.__amount = amount
         self.__date = date
@@ -48,7 +50,40 @@ class Account:
     """
 
     """
-    def __init__(self, account_number):
-        self.__account_number = account_number
-        self.__balance = None
-        self.__all_usd = True
+    def __init__(self, number: int, name: str):
+        assert len(name) > 3, "account`s name length must be at least 4 characters"
+        self.__name = name
+        self.__number = number
+        self.__transactions = list()
+
+    @property
+    def number(self):
+        return self.__number
+
+    @property
+    def all_usd(self):
+        for transaction in self.__transactions:
+            if transaction.currency != "USD":
+                return False
+        return True
+
+    @property
+    def balance(self):
+        total = 0
+        for transaction in self.__transactions:
+            total += transaction.usd
+        return total
+
+    @property
+    def name(self):
+        return self.__name
+
+    @name.setter
+    def name(self, name):
+        assert len(name) > 3, "account`s name length must be at least 4 characters"
+        self.__name = name
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

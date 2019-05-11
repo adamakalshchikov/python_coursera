@@ -269,7 +269,7 @@ class Image:
         else:
             raise ExportError("unsupported export format: " +
                               os.path.splitext(filename)[1])
-        
+
     def __export_xpm(self, filename):
         """Exports the image as an XPM file if less than 8930 colors are
         used

@@ -1,3 +1,5 @@
+import pickle
+
 
 class Transaction:
     """
@@ -48,6 +50,13 @@ class Transaction:
 
 class Account:
     """
+    >>> acc = Account(426578, "Alex`s account")
+    >>> acc.number, acc.name, acc.balance
+    426578, "Alex`s account", 0
+    >>> acc = Account(426578, "Alex`s account")
+    >>> t = Transaction(100, "2008-12-09")
+    >>> acc.apply(t)
+    >>> acc.number, acc.name, acc.balance
 
     """
     def __init__(self, number: int, name: str):
@@ -55,6 +64,9 @@ class Account:
         self.__name = name
         self.__number = number
         self.__transactions = list()
+
+    def __len__(self):
+        return len(self.__transactions)
 
     @property
     def number(self):
@@ -82,6 +94,34 @@ class Account:
     def name(self, name):
         assert len(name) > 3, "account`s name length must be at least 4 characters"
         self.__name = name
+
+    @staticmethod
+    def apply(self, transaction):
+        Account.check_arguments(self, transaction)
+        self.__transactions.append(transaction)
+
+    @staticmethod
+    def check_arguments(self, other):
+        try:
+            assert isinstance(other, Transaction)
+        except AssertionError:
+            raise TypeError(f'{other} must be an instance of Transaction class')
+        try:
+            assert isinstance(self, Account)
+        except AssertionError:
+            raise TypeError(f'{self} must be an instance of Account class')
+
+    @staticmethod
+    def save(self, filename: str):
+        with open(filename, 'wb') as f:
+            pickle.dump(self, f)
+            f.close()
+
+    @staticmethod
+    def load(filename):
+        with open(filename, 'rb') as f:
+            obj = pickle.load(f)
+            return obj
 
 
 if __name__ == "__main__":

@@ -19,16 +19,17 @@ class PinCompleter(object):
         self.suspected_pin = pin
         self.__various_of_pin = list()
         self.digit_generator = list()
-        self.__digit_handler = list()
+        self.__digit_buffer = list()
 
-    # Метод добавляет вариант пин-кода в строку-результат
+    # Метод добавляет вариант пин-кода в строку-результат (self.__various_of_pin) и очищет self.__digit_buffer
     def flush_variant(self):
-        variant = "".join(self.__digit_handler)
-        self.__digit_handler.clear()
+        variant = "".join(self.__digit_buffer)
+        self.__digit_buffer.clear()
         self.__various_of_pin.append(variant)
 
-    def add_digit(self, digit):
-        self.__digit_handler.append(digit)
+    # Добавляет цифру из пинкода в лист, который по заполнению будет сливаться в various_of_pin
+    def add_digit_to_buffer(self, digit):
+        self.__digit_buffer.append(digit)
 
     # Метод создаёт генераторы для каждой цифры в пинкоде
     def create_generator(self):
@@ -37,7 +38,7 @@ class PinCompleter(object):
 
     def get_variants(self):
         for d in self.digit_generator:
-            self.add_digit(next(d))
+            self.add_digit_to_buffer(next(d))
 
 
 def main():

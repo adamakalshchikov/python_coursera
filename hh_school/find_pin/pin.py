@@ -17,23 +17,27 @@ class PinCompleter(object):
         if not pin.isnumeric():
             raise ValueError('pin must be numeric')
         self.suspected_pin = pin
-        self.__various_of_pin = list(pin)
-        self.digit_generator = []
+        self.__various_of_pin = list()
+        self.digit_generator = list()
+        self.__digit_handler = list()
 
     # Метод добавляет вариант пин-кода в строку-результат
-    def add_variant(self, variant):
+    def flush_variant(self):
+        variant = "".join(self.__digit_handler)
+        self.__digit_handler.clear()
         self.__various_of_pin.append(variant)
 
-   # Метод создаёт генераторы для каждой цифры в пинкоде
+    def add_digit(self, digit):
+        self.__digit_handler.append(digit)
+
+    # Метод создаёт генераторы для каждой цифры в пинкоде
     def create_generator(self):
         for num in self.suspected_pin:
             self.digit_generator.append((num_gen for num_gen in PinCompleter.NEIGHBOURHOODS[num]))
 
-"""
-    def find_various(self):
-        while True:
-            try:
-"""
+    def get_variants(self):
+        for d in self.digit_generator:
+            self.add_digit(next(d))
 
 
 def main():

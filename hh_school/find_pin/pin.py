@@ -26,6 +26,10 @@ class PinCompleter(object):
     def flush_variant(self):
         pass
 
+    # Метод итерирует генератор, устанавливает следуещее значение в кортеже, нахожящимся в  self.__digit_handler
+    def get_next_value(self, position):
+        self.__digit_handler[position][1] = next(self.__digit_handler[position][0])
+
     # Метод создаёт генераторы для каждой цифры в пинкоде. Разряды считаются с конца числа
     def create_generator(self):
         for n, num in enumerate(reversed(self.suspected_pin)):

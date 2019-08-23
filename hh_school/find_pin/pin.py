@@ -27,7 +27,7 @@ class PinCompleter(object):
     # Метод добавляет вариант пин-кода в результат (self.__various_of_pin)
     def save_variant(self):
         tmp = list()
-        for ind in range(0, len(self.__digit_handler) - 1):
+        for ind in range(len(self.__digit_handler) - 1, -1, -1):
             tmp.append(self.__digit_handler[ind][1])
         self.__various_of_pin.append("".join(tmp))
 

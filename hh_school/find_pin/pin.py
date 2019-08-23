@@ -1,5 +1,6 @@
+from collections import namedtuple, OrderedDict
+
 class PinCompleter(object):
-    from collections import namedtuple
     DigitGenerator = namedtuple('DigitGenerator', ['bit_generator', 'bit_value'])
     NEIGHBOURHOODS = {
         "1": ['1', "2", "4"],
@@ -22,11 +23,15 @@ class PinCompleter(object):
         self.__various_of_pin = list()
         self.__digit_handler = dict()
 
-    # Метод добавляет вариант пин-кода в строку-результат (self.__various_of_pin) и очищет self.__digit_buffer
-    def flush_variant(self):
-        pass
+    # Метод добавляет вариант пин-кода в результат (self.__various_of_pin)
+    def save_variant(self):
+        tmp = list()
+        for ind in reversed(OrderedDict(self.__digit_handler)):
+            tmp.append(self.__digit_handler[ind][1])
+        self.__various_of_pin.append("".join(tmp))
 
     # Метод итерирует генератор, устанавливает следуещее значение в кортеже, нахожящимся в  self.__digit_handler
+    # позиция цифры считается с конца числа, начиная с нуля
     def get_next_value(self, position):
         self.__digit_handler[position][1] = next(self.__digit_handler[position][0])
 
@@ -37,7 +42,6 @@ class PinCompleter(object):
             bit_value = next(gen)
             bit_tuple = PinCompleter.DigitGenerator(gen, bit_value)
             self.__digit_handler[n] = bit_tuple
-
 
 
 def main():

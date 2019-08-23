@@ -1,4 +1,4 @@
-from .pin import NumerationSystemImitator
+from pin import NumerationSystemImitator
 
 
 class PinCompleter(NumerationSystemImitator):
@@ -10,19 +10,20 @@ class PinCompleter(NumerationSystemImitator):
 
     # Метод в бесконечном цикле перебирает значения младшего разряда
     # Если поднимается StopIteration, атрибут self.__stop_iteration_occurred = True
-    def iterate_byte(self):
-        try:
-            if self.__iterable_byte == 0:
-                while True:
-                    self.save_variant()
+    def iterate_bytes( self ):
+        while True:
+            try:
+                if self.__iterable_byte == 0:
+                    while True:
+                        self.save_variant()
+                        self.get_next_value(self.__iterable_byte)
+                else:
                     self.get_next_value(self.__iterable_byte)
-            else:
-                self.save_variant()
-                self.get_next_value(self.__iterable_byte)
-                self.__iterable_byte = 0
-        except StopIteration:
-            if self.__iterable_byte == self.pin_code_length - 1:
-                raise IndexError
-            self.restore_generator(self.__iterable_byte)
-            self.__iterable_byte += 1
-            self.iterate_byte()
+                    # self.save_variant()
+                    self.__iterable_byte = 0
+            except StopIteration:
+                if self.__iterable_byte == self.pin_code_length - 1:
+                    break
+                self.restore_generator(self.__iterable_byte)
+                self.__iterable_byte += 1
+                self.iterate_bytes()

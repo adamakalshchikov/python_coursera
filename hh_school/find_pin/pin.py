@@ -52,5 +52,6 @@ class NumerationSystemImitator(object):
     def print_values(self):
         print(", ".join(self.__various_of_pin))
 
+
 if __name__ == "__main__":
     pass

@@ -1,8 +1,4 @@
-from recordclass import recordclass
-
-
 class NumerationSystemImitator(object):
-    DigitGenerator = recordclass('DigitGenerator', ['bit_generator', 'bit_value'])
     NEIGHBOURHOODS = {
         "1": ['1', "2", "4"],
         "2": ['1', '2', '3', '5'],
@@ -28,28 +24,29 @@ class NumerationSystemImitator(object):
     def save_variant(self):
         tmp = list()
         for ind in range(len(self.__digit_handler) - 1, -1, -1):
-            tmp.append(self.__digit_handler[ind].bit_value)
+            tmp.append(self.__digit_handler[ind][1])
         self.__various_of_pin.append("".join(tmp))
 
     # Метод итерирует генератор, устанавливает следуещее значение в кортеже, нахожящимся в  self.__digit_handler
     # позиция цифры считается с конца числа, начиная с нуля
     def get_next_value(self, position):
-        self.__digit_handler[position].bit_value = next(self.__digit_handler[position].bit_generator)
+        self.__digit_handler[position][1] = next(self.__digit_handler[position][0])
 
     # Метод восстанавливает генератор, позиция цифры считается с конца числа
     # Для выбора нужной последовательности NumerationSystemImitator.NEIGHBOURHOODS используется первоначальный пинкод
     def restore_generator(self, position):
         seq_key = self.suspected_pin[::-1][position]
-        self.__digit_handler[position].bit_generator = (value for value in NumerationSystemImitator.NEIGHBOURHOODS[seq_key])
+        self.__digit_handler[position][0] = (value for value in NumerationSystemImitator.NEIGHBOURHOODS[seq_key])
         self.get_next_value(position)
 
     # Метод создаёт генераторы для каждой цифры в пинкоде. Разряды считаются с конца числа
+    # Хранилище генератора и его значения имеет формат [generator, generator_value]
     def create_generator(self):
         for n, num in enumerate(reversed(self.suspected_pin)):
             gen = (value for value in NumerationSystemImitator.NEIGHBOURHOODS[num])
             bit_value = next(gen)
-            bit_tuple = NumerationSystemImitator.DigitGenerator(gen, bit_value)
-            self.__digit_handler[n] = bit_tuple
+            bit_list = [gen, bit_value]
+            self.__digit_handler[n] = bit_list
 
 
 if __name__ == "__main__":

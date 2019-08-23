@@ -1,4 +1,6 @@
 class PinCompleter(object):
+    from collections import namedtuple
+    DigitGenerator = namedtuple('DigitGenerator', ['bit_generator', 'bit_value'])
     NEIGHBOURHOODS = {
         "1": ['1', "2", "4"],
         "2": ['1', '2', '3', '5'],
@@ -18,27 +20,20 @@ class PinCompleter(object):
             raise ValueError('pin must be numeric')
         self.suspected_pin = pin
         self.__various_of_pin = list()
-        self.digit_generator = list()
-        self.__digit_buffer = list()
+        self.__digit_handler = dict()
 
     # Метод добавляет вариант пин-кода в строку-результат (self.__various_of_pin) и очищет self.__digit_buffer
     def flush_variant(self):
-        variant = "".join(self.__digit_buffer)
-        self.__digit_buffer.clear()
-        self.__various_of_pin.append(variant)
+        pass
 
-    # Добавляет цифру из пинкода в лист, который по заполнению будет сливаться в various_of_pin
-    def add_digit_to_buffer(self, digit):
-        self.__digit_buffer.append(digit)
-
-    # Метод создаёт генераторы для каждой цифры в пинкоде
+    # Метод создаёт генераторы для каждой цифры в пинкоде. Разряды считаются с конца числа
     def create_generator(self):
-        for num in self.suspected_pin:
-            self.digit_generator.append((num_gen for num_gen in PinCompleter.NEIGHBOURHOODS[num]))
+        for n, num in enumerate(reversed(self.suspected_pin)):
+            gen = (value for value in PinCompleter.NEIGHBOURHOODS[num])
+            bit_value = next(gen)
+            bit_tuple = PinCompleter.DigitGenerator(gen, bit_value)
+            self.__digit_handler[n] = bit_tuple
 
-    def get_variants(self):
-        for d in self.digit_generator:
-            self.add_digit_to_buffer(next(d))
 
 
 def main():

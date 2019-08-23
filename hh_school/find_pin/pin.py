@@ -1,4 +1,5 @@
-from collections import namedtuple, OrderedDict
+from collections import namedtuple
+
 
 class PinCompleter(object):
     DigitGenerator = namedtuple('DigitGenerator', ['bit_generator', 'bit_value'])
@@ -26,7 +27,7 @@ class PinCompleter(object):
     # Метод добавляет вариант пин-кода в результат (self.__various_of_pin)
     def save_variant(self):
         tmp = list()
-        for ind in reversed(OrderedDict(self.__digit_handler)):
+        for ind in range(0, len(self.__digit_handler) - 1):
             tmp.append(self.__digit_handler[ind][1])
         self.__various_of_pin.append("".join(tmp))
 

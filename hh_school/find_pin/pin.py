@@ -48,6 +48,9 @@ class NumerationSystemImitator(object):
             bit_list = [gen, bit_value]
             self.__digit_handler[n] = bit_list
 
+    # Метод печатает значения, содержащиеся в self.__various_of_pin
+    def print_values(self):
+        print(", ".join(self.__various_of_pin))
 
 if __name__ == "__main__":
     pass

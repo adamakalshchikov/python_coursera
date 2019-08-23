@@ -1,7 +1,7 @@
 from recordclass import recordclass
 
 
-class PinCompleter(object):
+class NumerationSystemImitator(object):
     DigitGenerator = recordclass('DigitGenerator', ['bit_generator', 'bit_value'])
     NEIGHBOURHOODS = {
         "1": ['1', "2", "4"],
@@ -37,24 +37,20 @@ class PinCompleter(object):
         self.__digit_handler[position].bit_value = next(self.__digit_handler[position].bit_generator)
 
     # Метод восстанавливает генератор, позиция цифры считается с конца числа
-    # Для выбора нужной последовательности PinCompleter.NEIGHBOURHOODS используется первоначальный пинкод
+    # Для выбора нужной последовательности NumerationSystemImitator.NEIGHBOURHOODS используется первоначальный пинкод
     def restore_generator(self, position):
         seq_key = self.suspected_pin[::-1][position]
-        self.__digit_handler[position].bit_generator = (value for value in PinCompleter.NEIGHBOURHOODS[seq_key])
+        self.__digit_handler[position].bit_generator = (value for value in NumerationSystemImitator.NEIGHBOURHOODS[seq_key])
         self.get_next_value(position)
 
     # Метод создаёт генераторы для каждой цифры в пинкоде. Разряды считаются с конца числа
     def create_generator(self):
         for n, num in enumerate(reversed(self.suspected_pin)):
-            gen = (value for value in PinCompleter.NEIGHBOURHOODS[num])
+            gen = (value for value in NumerationSystemImitator.NEIGHBOURHOODS[num])
             bit_value = next(gen)
-            bit_tuple = PinCompleter.DigitGenerator(gen, bit_value)
+            bit_tuple = NumerationSystemImitator.DigitGenerator(gen, bit_value)
             self.__digit_handler[n] = bit_tuple
 
 
-def main():
-    pass
-
-
 if __name__ == "__main__":
-    main()
+    pass

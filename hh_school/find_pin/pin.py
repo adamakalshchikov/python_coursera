@@ -1,8 +1,8 @@
-from collections import namedtuple
+from recordclass import recordclass
 
 
 class PinCompleter(object):
-    DigitGenerator = namedtuple('DigitGenerator', ['bit_generator', 'bit_value'])
+    DigitGenerator = recordclass('DigitGenerator', ['bit_generator', 'bit_value'])
     NEIGHBOURHOODS = {
         "1": ['1', "2", "4"],
         "2": ['1', '2', '3', '5'],
@@ -28,13 +28,20 @@ class PinCompleter(object):
     def save_variant(self):
         tmp = list()
         for ind in range(len(self.__digit_handler) - 1, -1, -1):
-            tmp.append(self.__digit_handler[ind][1])
+            tmp.append(self.__digit_handler[ind].bit_value)
         self.__various_of_pin.append("".join(tmp))
 
     # Метод итерирует генератор, устанавливает следуещее значение в кортеже, нахожящимся в  self.__digit_handler
     # позиция цифры считается с конца числа, начиная с нуля
     def get_next_value(self, position):
-        self.__digit_handler[position][1] = next(self.__digit_handler[position][0])
+        self.__digit_handler[position].bit_value = next(self.__digit_handler[position].bit_generator)
+
+    # Метод восстанавливает генератор, позиция цифры считается с конца числа
+    # Для выбора нужной последовательности PinCompleter.NEIGHBOURHOODS используется первоначальный пинкод
+    def restore_generator(self, position):
+        seq_key = self.suspected_pin[::-1][position]
+        self.__digit_handler[position].bit_generator = (value for value in PinCompleter.NEIGHBOURHOODS[seq_key])
+        self.get_next_value(position)
 
     # Метод создаёт генераторы для каждой цифры в пинкоде. Разряды считаются с конца числа
     def create_generator(self):
